@@ -1,0 +1,96 @@
+﻿@model IEnumerable<BusinessObject.Customer>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form id="deleteForm" asp-action="DeleteMultiple" method="post">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)" />
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=> model.username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fullname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.birthday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.address)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    <input type="checkbox" name="selectedUsernames" value="@item.username" />
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem=> item.username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fullname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.birthday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.address)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-username="@item.username">Edit</a> |
+                    <a asp-action="Details" asp-route-username="@item.username">Details</a> |
+                    <a asp-action="Delete" asp-route-username="@item.username">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</form>
+<button type="button" class="btn btn-danger" onclick="submitDeleteForm()">Delete Selected</button>
+@section Scripts {
+    <script>
+        function toggleCheckboxes(source) {
+            checkboxes = document.getElementsByName('selectedUsernames');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
+        function submitDeleteForm() {
+            var checkboxes = document.querySelectorAll('input[name="selectedUsernames"]:checked');
+            if (checkboxes.length > 0) {
+                if (confirm('Are you sure you want to delete the selected items?')) {
+                    document.getElementById('deleteForm').submit();
+                }
+            } else {
+                alert('Please select at least one item to delete.');
+            }
+        }
+    </script>
+}
